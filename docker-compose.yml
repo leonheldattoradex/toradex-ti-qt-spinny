@@ -19,7 +19,7 @@ services:
       - weston
     device_cgroup_rules:
       - 'c 226:* rmw'
-    image: 'ghcr.io/leonheldattoradex/ti-toradex-spinny:v0.0.2'
+    image: 'ghcr.io/leonheldattoradex/ti-toradex-spinny:v0.0.3'
     volumes:
       - '/tmp:/tmp'
       - '/dev/dri:/dev/dri'
