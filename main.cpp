@@ -5,14 +5,20 @@
 #include <QLabel>
 #include <QSurfaceFormat>
 #include "cube_widget.h"
+#include "opengl_config.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
     QSurfaceFormat format;
+#ifdef USE_OPENGL_ES
     format.setVersion(3, 0);  // OpenGL ES 3.0
     format.setRenderableType(QSurfaceFormat::OpenGLES);
+#else
+    format.setVersion(3, 3);  // OpenGL 3.3
+    format.setProfile(QSurfaceFormat::CoreProfile);
+#endif
     format.setDepthBufferSize(24);
     format.setSamples(4);
     QSurfaceFormat::setDefaultFormat(format);

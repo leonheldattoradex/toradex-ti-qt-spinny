@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions>
+#include "opengl_config.h"
 
 CubeWidget::CubeWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -62,6 +63,7 @@ void CubeWidget::initializeGL()
     
     m_program = new QOpenGLShaderProgram;
     
+#ifdef USE_OPENGL_ES
     const char* vertexShaderSource = R"(
         #version 300 es
         layout (location = 0) in vec3 aPos;
@@ -97,6 +99,41 @@ void CubeWidget::initializeGL()
             FragColor = texture(ourTexture, texCoord) * vec4(vertexColor, 1.0);
         }
     )";
+#else
+    const char* vertexShaderSource = R"(
+        #version 330 core
+        layout (location = 0) in vec3 aPos;
+        layout (location = 1) in vec3 aColor;
+        layout (location = 2) in vec2 aTexCoord;
+        
+        out vec3 vertexColor;
+        out vec2 texCoord;
+        
+        uniform mat4 mvp;
+        
+        void main()
+        {
+            gl_Position = mvp * vec4(aPos, 1.0);
+            vertexColor = aColor;
+            texCoord = aTexCoord;
+        }
+    )";
+    
+    const char* fragmentShaderSource = R"(
+        #version 330 core
+        out vec4 FragColor;
+        
+        in vec3 vertexColor;
+        in vec2 texCoord;
+        
+        uniform sampler2D ourTexture;
+        
+        void main()
+        {
+            FragColor = texture(ourTexture, texCoord) * vec4(vertexColor, 1.0);
+        }
+    )";
+#endif
     
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
@@ -261,7 +298,8 @@ void CubeWidget::animate()
     if (m_rotationY >= 360.0f) m_rotationY -= 360.0f;
     if (m_rotationZ >= 360.0f) m_rotationZ -= 360.0f;
 
-    m_currentImage = 1;
+    // 1 for Toradex logo, 0 for TI logo
+    m_currentImage = 0;
     
     // This code makes the images switch every now and then
     // Switch texture every 120 frames (at 60FPS, roughly 2 seconds each)
