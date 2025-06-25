@@ -63,7 +63,7 @@ void CubeWidget::initializeGL()
     m_program = new QOpenGLShaderProgram;
     
     const char* vertexShaderSource = R"(
-        #version 330 core
+        #version 300 es
         layout (location = 0) in vec3 aPos;
         layout (location = 1) in vec3 aColor;
         layout (location = 2) in vec2 aTexCoord;
@@ -82,7 +82,9 @@ void CubeWidget::initializeGL()
     )";
     
     const char* fragmentShaderSource = R"(
-        #version 330 core
+        #version 300 es
+        precision mediump float;
+        
         out vec4 FragColor;
         
         in vec3 vertexColor;
@@ -261,14 +263,14 @@ void CubeWidget::animate()
 
     m_currentImage = 1;
     
-    // This code makes the images switch every now and then
+    // This code makes the images switch every now and then
     // Switch texture every 120 frames (at 60FPS, roughly 2 seconds each)
-    // static int frameCount = 0;
-    // frameCount++;
-    // if (frameCount >= 120) {
-    //     m_currentImage = (m_currentImage + 1) % 2;
-    //     frameCount = 0;
-    // }
+    // static int frameCount = 0;
+    // frameCount++;
+    // if (frameCount >= 120) {
+    //     m_currentImage = (m_currentImage + 1) % 2;
+    //     frameCount = 0;
+    // }
     
     update();
 } 

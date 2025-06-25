@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     
     QSurfaceFormat format;
-    format.setVersion(3, 3);
-    format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setVersion(3, 0);  // OpenGL ES 3.0
+    format.setRenderableType(QSurfaceFormat::OpenGLES);
     format.setDepthBufferSize(24);
     format.setSamples(4);
     QSurfaceFormat::setDefaultFormat(format);
