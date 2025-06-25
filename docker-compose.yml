@@ -1,0 +1,33 @@
+services:
+  weston:
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+    volumes:
+      - '/dev:/dev'
+      - '/tmp:/tmp'
+      - '/run/udev/:/run/udev/'
+    device_cgroup_rules:
+      - 'c 4:* rmw'
+      - 'c 13:* rmw'
+      - 'c 226:* rmw'
+    image: 'torizon/weston-am62:stable-rc'
+    command: '--developer'
+
+  spinning-cube:
+    depends_on:
+      - weston
+    device_cgroup_rules:
+      - 'c 226:* rmw'
+    image: 'leonardoheldattoradex/ti-toradex-spinny:0.0.2'
+    volumes:
+      - '/tmp:/tmp'
+      - '/dev/dri:/dev/dri'
+      - '/dev:/dev'
+    environment:
+      - DISPLAY=:0
+      - WAYLAND_DISPLAY=wayland-0
+      - QT_QPA_PLATFORM=wayland
+      - QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+    privileged: true
+    command: ./SpinningCube 
