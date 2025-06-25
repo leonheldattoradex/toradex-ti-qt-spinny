@@ -299,7 +299,7 @@ void CubeWidget::animate()
     if (m_rotationZ >= 360.0f) m_rotationZ -= 360.0f;
 
     // 1 for Toradex logo, 0 for TI logo
-    m_currentImage = 1;
+    m_currentImage = 0;
     
     // This code makes the images switch every now and then
     // Switch texture every 120 frames (at 60FPS, roughly 2 seconds each)
